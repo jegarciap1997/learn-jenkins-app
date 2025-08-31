@@ -21,9 +21,15 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
+                    test  -f build/index.html
                     npm run test
                 '''
             }
+        }
+    }
+    post {
+        always {
+            junit 'test-results/junit.xml' // referenciar archivo .xml con los resultados de las pruebas unitarias ejecutadas
         }
     }
 }
