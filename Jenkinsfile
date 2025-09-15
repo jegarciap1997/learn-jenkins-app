@@ -34,6 +34,11 @@ pipeline {
                             npm run test
                         '''
                     }
+                    post {
+                        always {
+                            junit 'jest-results/junit.xml' // referenciar archivo .xml con los resultados de las pruebas unitarias ejecutadas
+                        }
+                    }
                 }
                 stage('E2E') {
                     agent {
@@ -50,14 +55,14 @@ pipeline {
                             npx playwright test --reporter=html
                         '''
                     }
+                    post {
+                        always {
+                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true]) // publicar el resultado de las pruebas p2p en un enlace que se accede desde jenkins
+                        }
+                    }
                 }
             }
         }
-    }
-    post {
-        always {
-            junit 'jest-results/junit.xml' // referenciar archivo .xml con los resultados de las pruebas unitarias ejecutadas
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true]) // publicar el resultado de las pruebas p2p en un enlace que se accede desde jenkins
-        }
+        // Se puede ejecutar el post aqui o por cada stage...
     }
 }
