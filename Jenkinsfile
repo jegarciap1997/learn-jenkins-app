@@ -19,7 +19,7 @@ pipeline {
                 '''
             }
         }
-        state('Tests') {
+        stage('Tests') {
             parallel {  // ejecutar tareas en forma paralela ()stages
                 stage('Test') {
                     agent {
