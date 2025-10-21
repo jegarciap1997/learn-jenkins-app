@@ -2,6 +2,7 @@ pipeline {
     agent any
     environment {
         NETLIFY_SITE_ID = 'f9ee86e7-62ce-4e8c-881a-1243849ea692'
+        NETLIFY_AUTH_TOKEN = credentials('netlify-token') // asignar variable de entorno mediante los secrets de Jenkins, estos se configuran desde el Manage Jenkins/Credentials/System/Global credentials el nombre del argumento de la funcion credentials debe ser el id que se asigno al momento de configurar el secret
     }
     stages {
         stage('Build') {
@@ -80,6 +81,7 @@ pipeline {
                     npm install netlify-cli
                     node_modules/.bin/netlify --version
                     echo "Deploying to production. site ID: $NETLIFY_SITE_ID"
+                    node_modules/.bin/netlify status
                 '''
             }
         }
